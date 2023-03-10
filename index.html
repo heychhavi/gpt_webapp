@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>AILabsGPT</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="file:///Users/chhavisharma/Documents/amexlogo.png" alt="AMEX logo" width="58" height="68">
+            <h1>AILabsGPT</h1>
+        </div>
+    </header>
+    <main>
+        <div class="prompt-container">
+            <div class="prompt-box">
+                <label for="prompt">Select a prompt:</label>
+                <select id="prompt">
+                    <option value="summarize">Summarize</option>
+                    <option value="label">Label Generation</option>
+                    <option value="data_analysis">Data Analysis</option>
+                </select>
+            </div>
+        </div>
+        <div id="input-container">
+            <label for="input">Input:</label>
+            <textarea id="input" rows="10"></textarea>
+            <label for="response">Response:</label>
+            <textarea id="response" rows="10"></textarea>
+            <button id="submit">Submit</button>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2023 AILabsGPT. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
+
