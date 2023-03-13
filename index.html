@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>AILabsGPT</title>
@@ -15,10 +15,10 @@
         <div class="prompt-container">
             <div class="prompt-box">
                 <label for="prompt">Select a prompt:</label>
-                <select id="prompt">
-                    <option value="summarize">Summarize</option>
-                    <option value="label">Label Generation</option>
-                    <option value="data_analysis">Data Analysis</option>
+                <select id="prompt" name="prompt" onchange="setPretext()">
+                    <option value="Summarization">Summarization</option>
+                    <option value="Customer Satisfaction">Customer Satisfaction</option>
+                    <option value="Data Analysis">Data Analysis</option>
                 </select>
             </div>
         </div>
@@ -37,4 +37,3 @@
     <script src="index.js"></script>
 </body>
 </html>
-
