@@ -29,7 +29,7 @@ async function summarize(prompt, completion) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer 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',
+            'Authorization': 'Bearer sk-',
         },
         body: JSON.stringify(params),
     });
@@ -52,5 +52,3 @@ if (form) {
         responseOutput.value = response;
     });
 }
-
-
