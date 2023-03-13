@@ -1,8 +1,12 @@
 ﻿function handleSubmit(event) {
     event.preventDefault();
 
-    const prompt = document.querySelector('input[name="prompt"]:checked').value;
-    const input = document.getElementById('input-text').value;
+    const promptSelect = document.getElementById('prompt');
+    const prompt = promptSelect.value;
+    const inputTextarea = document.getElementById('input');
+
+    // Get the value of the input <textarea> element
+    const input = inputTextarea.value;
 
     console.log('Prompt:', prompt);
     console.log('Input:', input);
@@ -10,39 +14,43 @@
     let model;
     let params;
 
-    if (prompt === 'summarize') {
+    if (prompt === 'Summarization') {
         model = 'text-davinci-002';
         params = {
-            "prompt":"Summarise the text in bullet points" + input,
-            "temperature": 0.5,
-            "max_tokens": 60,
+            "prompt": input,
+            "temperature": 0.1,
+            "max_tokens": 200,
             "top_p": 1,
             "frequency_penalty": 0,
             "presence_penalty": 0
         };
-    } else if (prompt === 'label') {
-        model = 'davinci';
+    } else if (prompt === 'Customer Satisfaction') {
+        model = 'text-davinci-002';
         params = {
-            "model": model,
             "prompt": input,
-            "temperature": 0.7,
-            "max_tokens": 50,
+            "temperature": 0.1,
+            "max_tokens": 200,
             "top_p": 1,
             "frequency_penalty": 0,
             "presence_penalty": 0,
             "logprobs": 10
         };
-    } else if (prompt === 'analyze') {
-        model = 'data-davinci-002';
+    } else if (prompt === 'Data Analysis') {
+        model = 'text-davinci-002';
         params = {
-            "query": input,
-            "model": model
+            "prompt": input,
+            "temperature": 0.1,
+            "max_tokens": 200,
+            "top_p": 1,
+            "frequency_penalty": 0,
+            "presence_penalty": 0,
+            "logprobs": 10
         };
     }
 
     const requestHeaders = {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer sk-`
+        'Authorization': `Bearer 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`
     };
 
     console.log('Request Headers:', requestHeaders);
@@ -54,156 +62,62 @@
         headers: requestHeaders,
         body: JSON.stringify(params)
     })
+        // Parse the response from OpenAI API and update the <textarea> element
         .then(response => response.json())
         .then(data => {
+            if (!data) {
+                console.error('Error: Empty response');
+                return;
+            }
+
             console.log('Response:', data);
             const responseText = data.choices[0].text;
-            document.getElementById('response-text').value = responseText;
+
+            // Select the <textarea> element and set its value to the response text
+            const responseTextarea = document.getElementById('response');
+            responseTextarea.value = responseText;
         })
         .catch(error => {
             console.error('Error:', error);
         });
+
 }
 
-document.getElementById('submit-btn').addEventListener('click', handleSubmit);
+document.getElementById('submit').addEventListener('click', handleSubmit);
 
 
-
-/*function handleSubmit(event) {
-    event.preventDefault();
-
-    const prompt = document.querySelector('input[name="prompt"]:checked').value;
-    const input = document.getElementById('input-text').value;
-
-    let model;
-    let params;
-
-    if (prompt === 'summarize') {
-        model = 'text-davinci-002';
-        params = {
-            "prompt": "Summarize the following text with bullet points:\n" + input,
-            "temperature": 0.5,
-            "max_tokens": 60,
-            "top_p": 1,
-            "frequency_penalty": 0,
-            "presence_penalty": 0
-        };
-    } else if (prompt === 'label') {
-        model = 'davinci';
-        params = {
-            "model": model,
-            "prompt": "Label the following text:\n" + input,
-            "temperature": 0.7,
-            "max_tokens": 50,
-            "top_p": 1,
-            "frequency_penalty": 0,
-            "presence_penalty": 0,
-            "logprobs": 10
-        };
-    } else if (prompt === 'data_analysis') {
-        model = 'data-davinci-002';
-        params = {
-            "query": "Analyse the following data:" + input,
-            "model": model
-        };
-    }
-
-    const requestHeaders = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer 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`
-    };
-
-    console.log('Request Headers:', requestHeaders);
-    console.log('Model:', model);
-    console.log('Params:', params);
-    
-
-    fetch('https://api.openai.com/v1/engines/' + model + '/completions', {
-        method: 'POST',
-        headers: requestHeaders,
-        body: JSON.stringify(params)
-    })
-        .then(response => response.json())
-        .then(data => {
-            const responseText = data.choices[0].text;
-            document.getElementById('response-text').value = responseText;
-        })
-        
-        .then(response => {
-            console.log('Response received from OpenAI API.');
-            return response.json();
-        })
-        .then(data => {
-            console.log('Parsing response from OpenAI API.');
-            const responseText = data.choices[0].text;
-            document.getElementById('response-text').value = responseText;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-    
-*/
-
-/*const openaiApiKey = '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'; // replace with your OpenAI API key
-
-const promptSelect = document.getElementById("prompt-select");
-const inputTextArea = document.getElementById("input-text");
-const responseTextArea = document.getElementById("response-text");
-const submitButton = document.getElementById("submit-btn");
-
-submitButton.addEventListener('click', () => {
-    const prompt = promptSelect.value;
-    const inputText = inputTextArea.value.trim();
-
-    if (prompt === 'summarize') {
-        // summarize the text with bullet points
-        const request = {
-            "model": "text-davinci-002",
-            "prompt": "Summarize the following text with bullet points:\n" + inputText,
-            "temperature": 0,
-            "max_tokens": 60,
-            "n": 5,
-            "stop": "\n"
-        };
-        generateOpenAIResponse(request);
-    } else if (prompt === 'label') {
-        // label the text
-        const request = {
-            "model": "text-davinci-002",
-            "prompt": "Label the following text:\n" + inputText,
-            "temperature": 0,
-            "max_tokens": 60,
-            "n": 1
-        };
-        generateOpenAIResponse(request);
-    } else if (prompt === 'analyze') {
-        // analyze the data
-        const request = {
-            "model": "data-davinci-002",
-            "prompt": "Analyse the following data:"+inputText,
-            "temperature": 0,
-            "max_tokens": 60,
-            "n": 1
-        };
-        generateOpenAIResponse(request);
-    }
+const promptSelect = document.getElementById('prompt');
+promptSelect.addEventListener('change', () => {
+    const inputTextarea = document.getElementById('input');
+    const responseTextarea = document.getElementById('response');
+    inputTextarea.value = '';
+    responseTextarea.value = '';
 });
 
-function generateOpenAIResponse(request) {
-    fetch('https://api.openai.com/v1/completions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + openaiApiKey
-        },
-        body: JSON.stringify(request)
-    })
-        .then(response => response.json())
-        .then(data => {
-            const openaiResponse = data.choices[0].text;
-            responseTextArea.value = openaiResponse;
-        })
-        .catch(error => console.error(error));
-}
-*/
+const setPretext = () => {
+    const promptSelect = document.getElementById('prompt');
+    const inputTextarea = document.getElementById('input');
+    const prompt = promptSelect.value;
+    let pretext = '';
+    if (prompt === 'Summarization') {
+        pretext = 'Summarise the following text with bullet points: ';
+    } else if (prompt === 'Customer Satisfaction') {
+        pretext = 'Classify customer emotion in Satisfied or Unsatisfied: ';
+    } else if (prompt === 'Data Analysis') {
+        pretext = 'Analyse the Dataset and give summary in bullet points: ';
+    }
+    inputTextarea.value = pretext;
+    inputTextarea.focus();
+
+    // Move the cursor to the end of the pre-filled text
+    const len = inputTextarea.value.length;
+    inputTextarea.setSelectionRange(len, len);
+    promptSelect.addEventListener('change', () => {
+        const promptSelect = document.getElementById('prompt');
+        const inputTextarea = document.getElementById('input');
+        inputTextarea.value = '';
+        setPretext();;
+    });
+
+};
+setPretext();
